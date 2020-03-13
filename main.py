@@ -5,8 +5,9 @@ import nltk
 
 def teaching():
     f = open("book1.txt", "r")
-
+    f1=open("book2.txt","r")
     contents = f.read()
+    contents1=f1.read()
 
     s = 'Although Shakespeare was married to a woman and fathered three children, Susanna, Hamnet and Judith, people have debated his sexuality.'
     s1 = 'Some people, such as Peter Holland of the Shakespeare Institute at Birmingham University, have argued that Shakespeare was possibly bisexual because of some of the sonnets he wrote that were directed towards young men.'
@@ -15,6 +16,7 @@ def teaching():
     t1 = nltk.word_tokenize(s1)
     t2 = nltk.word_tokenize(s2)
     t3 = nltk.word_tokenize(contents)
+    t4=nltk.word_tokenize(contents1)
     common_texts = [["his", "plays", "are", "of", "different", "kinds", "or", "genres"],
                     ["There", "are", "histories", "tragedies", "and", "comedies"],
                     ["These", "plays", "are", "among", "the", "best", "known", "in", "English", "literature", "and"],
@@ -25,8 +27,9 @@ def teaching():
     common_texts.append(t1)
     common_texts.append(t2)
     common_texts.append(t3)
-    model = Word2Vec(common_texts, size=5, window=5, min_count=1, workers=4)
-    model.save("new.model")
+#    common_texts.append(t4)
+    model = Word2Vec(common_texts, size=50, window=5, min_count=1, workers=4)
+    model.save("model.model")
     return model
 
 
@@ -38,15 +41,19 @@ def tests(model):
     w2 = "tragedies"
     w3 = "genres"
     w4 = "kinds"
-    # print(model.wv.most_similar(positive=w1))
+    print("Word similar to women: ")
+    print(model.wv.most_similar(positive="women"))
     print(model.wv.similarity(w2, w1))
     print(model.wv.similarity(w3, w4))
     print(model.wv.similarity(w1, w4))
+    print(model.wv.similarity("you", "building"))
+    print(model.wv.similarity("me", "I"))
     print(vector)
     print("----------")
     print(vector1)
 
 if __name__ == '__main__':
     #model=teaching()
-    model=Word2Vec.load("new.model")
+    model=Word2Vec.load("model.model")
+    print("Teaching/Loading has completed")
     tests(model)
